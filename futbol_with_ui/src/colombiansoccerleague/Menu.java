@@ -10,10 +10,11 @@ import javax.swing.table.DefaultTableModel;
 
 public class Menu extends javax.swing.JFrame {
     private ArrayList<Team> lstTeams;
+    private ArrayList<Match> totalMatches;
     private int userOption;
     //private ArrayList<MatchDate> lstMatchDates;
     public static ArrayList<Match> lstMatches;
-    Match match = new Match();
+  //  Match match = new Match();
     //MatchDate matchDate = new MatchDate();
     static int countMatchDate;
             
@@ -26,6 +27,8 @@ public class Menu extends javax.swing.JFrame {
        lstTeams= new ArrayList<>();
        //lstMatchDates=new ArrayList<>();
        lstMatches=new ArrayList<>();
+       totalMatches=new ArrayList<>();
+       initTeams();
        initComponents();
        initObjects();
     }
@@ -53,12 +56,12 @@ public class Menu extends javax.swing.JFrame {
     }
     
     private void initSObjects() {
-        var rows = lstTeams.size()*(lstTeams.size()-1);
+        var rows = totalMatches.size();
         String[][] data = new String[rows][4];
         for (int i = 0; i < rows; i++) {
             data[i][0] = totalMatches.get(i).getTeam1().getName();
-            data[i][1] = String.valueOf(totalMatches.get(i).getGoalsTeam1());
-            data[i][2] = String.valueOf(totalMatches.get(i).getGoalsTeam2());
+            data[i][1] = String.valueOf(totalMatches.get(i).getGoals1());
+            data[i][2] = String.valueOf(totalMatches.get(i).getGoals2());
             data[i][3] = totalMatches.get(i).getTeam2().getName();
         }
         tableModel = new DefaultTableModel(data, SCOLUMNS) {
@@ -67,6 +70,8 @@ public class Menu extends javax.swing.JFrame {
                 return false;
             }
         };
+        tblRecap.setModel(tableModel);
+        tblRecap.setAutoCreateRowSorter(true);
     }
     
     public int getUserOption() {
@@ -125,11 +130,14 @@ public class Menu extends javax.swing.JFrame {
     }
    
     public void faceOff(Team team1, Team team2) {
+        Match match = new Match(team1,team2);
         int goals1=0;
         int goals2=0;
         switch (userOption) {
             case 0:
                 askUserScore(team1, team2, goals1, goals2);
+                match.setGoals1(goals1);
+                match.setGoals2(goals2);
                 if (goals1 == goals2) {
                     match.draw(team1, team2, goals1);
                 } else if (goals1 < goals2) {
@@ -139,12 +147,16 @@ public class Menu extends javax.swing.JFrame {
                     match.winner(team1, goals1, goals2);
                     match.losser(team2, goals2, goals1);
                 }
+                totalMatches.add(match);
                 break;
             case 1:
                 goals1 = (int) (Math.random() * 5);
                 goals2 = (int) (Math.random() * 5);
+                match.setGoals1(goals1);
+                match.setGoals2(goals2);
                 if (goals1 == goals2) {
                     match.draw(team1, team2, goals1);
+
                 } else if (goals1 < goals2) {
                     match.winner(team2, goals2, goals1);
                     match.losser(team1, goals1, goals2);
@@ -152,6 +164,7 @@ public class Menu extends javax.swing.JFrame {
                     match.winner(team1, goals1, goals2);
                     match.losser(team2, goals2, goals1);
                 }
+                totalMatches.add(match);
                 break;
             default:
                 break;
@@ -161,11 +174,11 @@ public class Menu extends javax.swing.JFrame {
     
     
      public void getMatches(){
-        for (int i = 0; i < 20 / 2; i++) {
-            int team1 = i;
-            int team2 = 20 - 1 - i;
-            var matchS = new Match(lstTeams.get(team1), lstTeams.get(team2));
-            faceOff(lstTeams.get(team1), lstTeams.get(team2));
+        for (int i = 0; i < 10; i++) {
+            Team team1 = lstTeams.get(i);
+            Team team2 = lstTeams.get(lstTeams.size() - 1 - i);
+            var matchS = new Match(team1, team2);
+            faceOff(team1, team2);
             lstMatches.add(matchS);
         }
         Collections.rotate(lstTeams.subList(1, lstTeams.size()), 1);
