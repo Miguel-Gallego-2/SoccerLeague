@@ -28,9 +28,9 @@ public class Menu extends javax.swing.JFrame {
        //lstMatchDates=new ArrayList<>();
        lstMatches=new ArrayList<>();
        totalMatches=new ArrayList<>();
-       initTeams();
        initComponents();
-       initObjects();
+
+
     }
     
     private void initObjects() {
@@ -87,13 +87,15 @@ public class Menu extends javax.swing.JFrame {
         lstStringTeams.add("Nacional");
         lstStringTeams.add("Patriotas");
         lstStringTeams.add("Santa Fe");
+        /*
         lstStringTeams.add("Cali");
+        
         lstStringTeams.add("Tolima");
         lstStringTeams.add("Medellín");
         lstStringTeams.add("Patriotas");
         lstStringTeams.add("Aguilas Doradas");
         lstStringTeams.add("Millonarios");
-        lstStringTeams.add("Once Caldas");
+        lstStringTeams.add("Once Caldas");*/
         
         for (int i = 0; i < lstStringTeams.size(); i++) {
             Team team = new Team();
@@ -174,44 +176,20 @@ public class Menu extends javax.swing.JFrame {
     
     
      public void getMatches(){
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < lstTeams.size(); i++) {
             Team team1 = lstTeams.get(i);
             Team team2 = lstTeams.get(lstTeams.size() - 1 - i);
             var matchS = new Match(team1, team2);
             faceOff(team1, team2);
+            team1.setMatchesPlayed(1);
+            team2.setMatchesPlayed(1);
             lstMatches.add(matchS);
         }
         Collections.rotate(lstTeams.subList(1, lstTeams.size()), 1);
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+ 
     
 @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -392,11 +370,13 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPlayRoundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayRoundActionPerformed
+       initTeams();
         do {
             countMatchDate++;
             getMatches();
         } while (countMatchDate != 20);
-        initObjects();
+       initObjects();
+       initSObjects();
  
         
         /*if (counter < (game.getTeamsLstSize()/2) * (game.getTeamsLstSize() - 2) + 1 ){

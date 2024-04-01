@@ -38,7 +38,7 @@ public class Team {
     }
 
     public void setWins(int wins) {
-        this.wins = wins;
+        this.wins += wins;
     }
 
     public int getLosses() {
@@ -46,7 +46,7 @@ public class Team {
     }
 
     public void setLosses(int losses) {
-        this.losses = losses;
+        this.losses += losses;
     }
 
     public int getDraws() {
@@ -54,7 +54,7 @@ public class Team {
     }
 
     public void setDraws(int draws) {
-        this.draws = draws;
+        this.draws += draws;
     }
 
     public int getPoints() {
@@ -62,7 +62,7 @@ public class Team {
     }
 
     public void setPoints(int points) {
-        this.points = points;
+        this.points += points;
     }
 
     public int getGoalsScored() {
@@ -70,7 +70,7 @@ public class Team {
     }
 
     public void setGoalsScored(int goalsScored) {
-        this.goalsScored = goalsScored;
+        this.goalsScored += goalsScored;
     }
 
     public int getGoalsConceded() {
@@ -78,7 +78,7 @@ public class Team {
     }
 
     public void setGoalsConceded(int goalsConceded) {
-        this.goalsConceded = goalsConceded;
+        this.goalsConceded += goalsConceded;
     }
 
     public int getMatchesPlayed() {
@@ -86,7 +86,7 @@ public class Team {
     }
 
     public void setMatchesPlayed(int matchesPlayed) {
-        this.matchesPlayed = matchesPlayed;
+        this.matchesPlayed += matchesPlayed;
     }
     
 
