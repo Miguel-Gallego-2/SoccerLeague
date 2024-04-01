@@ -1,27 +1,38 @@
 
 package colombiansoccerleague;
 
-import java.util.ArrayList;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import static javax.swing.JOptionPane.showMessageDialog;
 
-public class Main extends javax.swing.JFrame {
-    Match game = new Match();
-    ArrayList<Team> lstTeams = game.getLstTeams();
+import java.util.ArrayList;
+import java.util.Collections;
+import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
+import javax.swing.table.DefaultTableModel;
+
+public class Menu extends javax.swing.JFrame {
+    private ArrayList<Team> lstTeams;
+    private int userOption;
+    //private ArrayList<MatchDate> lstMatchDates;
+    public static ArrayList<Match> lstMatches;
+    Match match = new Match();
+    //MatchDate matchDate = new MatchDate();
+    static int countMatchDate;
+            
     String[] COLUMNS = {"Name", "W", "L","D","GS","GC","M","Pts"};
+    String[] SCOLUMNS = {"Team1", "GoalsTeam1", "GoalsTeam2", "Team2"};
     DefaultTableModel tableModel;
-    int counter = 0;
     
-    public Main() {
+    
+    public Menu() {
+       lstTeams= new ArrayList<>();
+       //lstMatchDates=new ArrayList<>();
+       lstMatches=new ArrayList<>();
        initComponents();
-       game.initTeamList();
        initObjects();
     }
     
     private void initObjects() {
-        String[][] data = new String [game.getTeamsLstSize()][8];
-        for (int i = 0; i < game.getTeamsLstSize(); i++) {
+        String[][] data = new String[lstTeams.size()][8];
+        for (int i = 0; i < lstTeams.size(); i++) {
             data[i][0] = lstTeams.get(i).getName();
             data[i][1] = String.valueOf(lstTeams.get(i).getWins());
             data[i][2] = String.valueOf(lstTeams.get(i).getLosses());
@@ -38,7 +49,156 @@ public class Main extends javax.swing.JFrame {
             }
         };
         tblStats.setModel(tableModel);
+        tblStats.setAutoCreateRowSorter(true);
     }
+    
+    private void initSObjects() {
+        var rows = lstTeams.size()*(lstTeams.size()-1);
+        String[][] data = new String[rows][4];
+        for (int i = 0; i < rows; i++) {
+            data[i][0] = totalMatches.get(i).getTeam1().getName();
+            data[i][1] = String.valueOf(totalMatches.get(i).getGoalsTeam1());
+            data[i][2] = String.valueOf(totalMatches.get(i).getGoalsTeam2());
+            data[i][3] = totalMatches.get(i).getTeam2().getName();
+        }
+        tableModel = new DefaultTableModel(data, SCOLUMNS) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+    }
+    
+    public int getUserOption() {
+        return userOption;
+    }
+
+    public void setUserOption(int userOption) {
+        this.userOption = userOption;
+    }
+    
+    public ArrayList<Team> initTeams() {
+        ArrayList<String> lstStringTeams = new ArrayList<>();
+        lstStringTeams.add("Nacional");
+        lstStringTeams.add("Patriotas");
+        lstStringTeams.add("Santa Fe");
+        lstStringTeams.add("Cali");
+        lstStringTeams.add("Tolima");
+        lstStringTeams.add("Medellín");
+        lstStringTeams.add("Patriotas");
+        lstStringTeams.add("Aguilas Doradas");
+        lstStringTeams.add("Millonarios");
+        lstStringTeams.add("Once Caldas");
+        
+        for (int i = 0; i < lstStringTeams.size(); i++) {
+            Team team = new Team();
+            team.setName(lstStringTeams.get(i));
+            lstTeams.add(team);
+        }
+        return lstTeams;
+    }
+
+    public void askUserScore(Team team1, Team team2, int goals1, int goals2){
+        boolean flag;
+         do {
+            try {
+                var question = ("Insert the goals scored by " + team1.getName() + ":");
+                goals1 = Integer.parseInt(JOptionPane.showInputDialog(question));
+                flag = false;
+            } catch (Exception e) {
+                showMessageDialog(null, "Please, insert correct values");
+                flag = true;
+            }
+        }while (flag);
+          
+        do{
+            try {
+                var question = ("Insert the goals scored by " + team2.getName() + ":");
+                goals2 = Integer.parseInt(JOptionPane.showInputDialog(question));
+                flag = false;
+                } catch (Exception e) {
+                    System.out.println("Please, insert correct values");
+                    flag = true;
+                    showMessageDialog(null, "Please, insert correct values");
+                 }
+        }while (flag);
+    }
+   
+    public void faceOff(Team team1, Team team2) {
+        int goals1=0;
+        int goals2=0;
+        switch (userOption) {
+            case 0:
+                askUserScore(team1, team2, goals1, goals2);
+                if (goals1 == goals2) {
+                    match.draw(team1, team2, goals1);
+                } else if (goals1 < goals2) {
+                    match.winner(team2, goals2, goals1);
+                    match.losser(team1, goals1, goals2);
+                } else {
+                    match.winner(team1, goals1, goals2);
+                    match.losser(team2, goals2, goals1);
+                }
+                break;
+            case 1:
+                goals1 = (int) (Math.random() * 5);
+                goals2 = (int) (Math.random() * 5);
+                if (goals1 == goals2) {
+                    match.draw(team1, team2, goals1);
+                } else if (goals1 < goals2) {
+                    match.winner(team2, goals2, goals1);
+                    match.losser(team1, goals1, goals2);
+                } else {
+                    match.winner(team1, goals1, goals2);
+                    match.losser(team2, goals2, goals1);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    
+    
+    
+     public void getMatches(){
+        for (int i = 0; i < 20 / 2; i++) {
+            int team1 = i;
+            int team2 = 20 - 1 - i;
+            var matchS = new Match(lstTeams.get(team1), lstTeams.get(team2));
+            faceOff(lstTeams.get(team1), lstTeams.get(team2));
+            lstMatches.add(matchS);
+        }
+        Collections.rotate(lstTeams.subList(1, lstTeams.size()), 1);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -50,9 +210,7 @@ public class Main extends javax.swing.JFrame {
         lblStats = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         lblTitle = new javax.swing.JLabel();
-        btnPlayMatch = new javax.swing.JButton();
         btnPlayRound = new javax.swing.JButton();
-        btnPlayTournament = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         lblRecap = new javax.swing.JLabel();
@@ -100,16 +258,6 @@ public class Main extends javax.swing.JFrame {
         lblTitle.setForeground(new java.awt.Color(183, 40, 57));
         lblTitle.setText("AllOutSoccer");
 
-        btnPlayMatch.setBackground(new java.awt.Color(231, 231, 231));
-        btnPlayMatch.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        btnPlayMatch.setText("Play Match");
-        btnPlayMatch.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(183, 40, 57), 2, true));
-        btnPlayMatch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPlayMatchActionPerformed(evt);
-            }
-        });
-
         btnPlayRound.setBackground(new java.awt.Color(231, 231, 231));
         btnPlayRound.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
         btnPlayRound.setText("Play Round");
@@ -117,16 +265,6 @@ public class Main extends javax.swing.JFrame {
         btnPlayRound.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPlayRoundActionPerformed(evt);
-            }
-        });
-
-        btnPlayTournament.setBackground(new java.awt.Color(231, 231, 231));
-        btnPlayTournament.setFont(new java.awt.Font("Century Gothic", 1, 14)); // NOI18N
-        btnPlayTournament.setText("Play Tournament");
-        btnPlayTournament.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(183, 40, 57), 2, true));
-        btnPlayTournament.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPlayTournamentActionPerformed(evt);
             }
         });
 
@@ -141,13 +279,9 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblTitle)
-                .addGap(141, 141, 141)
-                .addComponent(btnPlayMatch, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(104, 104, 104)
+                .addGap(353, 353, 353)
                 .addComponent(btnPlayRound, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
-                .addComponent(btnPlayTournament, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(119, 119, 119))
+                .addContainerGap(349, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,9 +290,7 @@ public class Main extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnPlayMatch, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnPlayRound, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnPlayTournament, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblTitle)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(15, 15, 15)
@@ -247,7 +379,14 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPlayRoundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayRoundActionPerformed
-        if (counter < (game.getTeamsLstSize()/2) * (game.getTeamsLstSize() - 2) + 1 ){
+        do {
+            countMatchDate++;
+            getMatches();
+        } while (countMatchDate != 20);
+        initObjects();
+ 
+        
+        /*if (counter < (game.getTeamsLstSize()/2) * (game.getTeamsLstSize() - 2) + 1 ){
             counter += game.getTeamsLstSize()/2; 
             game.playRound();
             //newList = game.playRound();
@@ -264,71 +403,21 @@ public class Main extends javax.swing.JFrame {
                 showMessageDialog(null, "Hold on!!!" +"\n"+ "All the rounds have already been played.");
                 disableButtons();
             }
-        }  
+        } */ 
     }//GEN-LAST:event_btnPlayRoundActionPerformed
 
-    private void btnPlayTournamentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayTournamentActionPerformed
-        if(counter==0){
-            game.playTournament();
-            //newList = game.playTournament();
-            //updatedLstStats();
-            updatedLstStats();
-            counter += game.getTeamsLstSize()/2 * (game.getTeamsLstSize()-1);
-            
-        }
-        else{
-            if (counter<(game.getTeamsLstSize()/2) *(game.getTeamsLstSize()-1)){
-                showMessageDialog(null, "Select another option.");
-                btnPlayTournament.setEnabled(false);
-            } 
-            else{
-                showMessageDialog(null, "Hold on!!!" +"\n"+ "The tournament have already been played.");
-                disableButtons();
-            }
-        }
-    }//GEN-LAST:event_btnPlayTournamentActionPerformed
-
-    private void btnPlayMatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayMatchActionPerformed
-        if (counter<(game.getTeamsLstSize()/2)*(game.getTeamsLstSize()-1)){
-            counter += 1;
-            game.playMatch();
-            //newList = game.playMatch();
-            //updatedLstStats();
-            initObjects();
-        }
-        else{
-           showMessageDialog(null, "Hold on!!!" +"\n"+ "All the matches have already been played.");
-           disableButtons();
-        }
-    }//GEN-LAST:event_btnPlayMatchActionPerformed
-
     private void btnShowWinnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowWinnerActionPerformed
-        if(counter==(game.getTeamsLstSize()/2)*(game.getTeamsLstSize()-1)){
+        /*if(counter==(game.getTeamsLstSize()/2)*(game.getTeamsLstSize()-1)){
             showWinner();
             disableButtons();
         }
         else{
             showMessageDialog(null, "Hold on!!!" +"\n"+ "The tournament hasn't ended.");  
-        }
+        }*/
     }//GEN-LAST:event_btnShowWinnerActionPerformed
 
-   public void updatedLstStats(){
-        String[][] data = new String[game.getTeamsLstSize()][8];
-        for (int i = 0; i < game.getTeamsLstSize(); i++) {
-            data[i][0] = lstTeams.get(i).getName();
-            data[i][1] = String.valueOf(lstTeams.get(i).getWins());
-            data[i][2] = String.valueOf(lstTeams.get(i).getLosses());
-            data[i][3] = String.valueOf(lstTeams.get(i).getDraws());
-            data[i][4] = String.valueOf(lstTeams.get(i).getGoalsScored());
-            data[i][5] = String.valueOf(lstTeams.get(i).getGoalsConceded());
-            data[i][6] = String.valueOf(lstTeams.get(i).getMatchesPlayed());
-            data[i][7] = String.valueOf(lstTeams.get(i).getPoints());
-        }
-        tableModel.setDataVector(data, COLUMNS);
-        tblStats.setModel(tableModel);    
-    }
     
-   public void showWinner(){
+   /* public void showWinner(){
        int maxPoints=0;
        ArrayList<String> winners = new ArrayList<>();
        for(Team e: lstTeams){
@@ -347,28 +436,27 @@ public class Main extends javax.swing.JFrame {
        else{
         showMessageDialog(null, "The winners are "+winners);
        }
-   }
+   }*/
+   
     /*TODO Crear un alert que me muestre el ganador(podemos poner que cuando counter==)
     if(counter==game.getLstSize()/2)*(game.getLstSize()-1) do el alert con el ganador*/
     
-    public void disableButtons(){
+    /*public void disableButtons(){
         if (counter== (game.getTeamsLstSize()/2) *(game.getTeamsLstSize()-1) ) {  
             btnPlayRound.setEnabled(false);
             btnPlayTournament.setEnabled(false);
             btnPlayMatch.setEnabled(false);
         }
-    }
+    }*/
     
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
-            new Main().setVisible(true);
+            new Menu().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnPlayMatch;
     private javax.swing.JButton btnPlayRound;
-    private javax.swing.JButton btnPlayTournament;
     private javax.swing.JButton btnShowWinner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

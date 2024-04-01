@@ -7,7 +7,7 @@ package colombiansoccerleague;
 
 public class FirstFrame extends javax.swing.JFrame {
     private int userOption;
-    Main main = new Main();
+    Menu menu = new Menu();
     
     public FirstFrame() {
         initComponents();
@@ -158,14 +158,14 @@ public class FirstFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnManualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManualActionPerformed
-           main.game.setUserOption(0);
-           main.setVisible(true);
+           menu.setUserOption(0);
+           menu.setVisible(true);
            disabledButtons();
     }//GEN-LAST:event_btnManualActionPerformed
 
     private void btnAutomaticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutomaticActionPerformed
-            main.game.setUserOption(1);
-            main.setVisible(true);
+            menu.setUserOption(1);
+            menu.setVisible(true);
             disabledButtons();
     }//GEN-LAST:event_btnAutomaticActionPerformed
     public void disabledButtons(){
@@ -198,11 +198,8 @@ public class FirstFrame extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FirstFrame().setVisible(true); 
-            }
-
+        java.awt.EventQueue.invokeLater(() -> {
+            new FirstFrame().setVisible(true);
         });
     }
 
