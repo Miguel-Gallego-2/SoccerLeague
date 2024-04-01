@@ -1,6 +1,4 @@
-
 package colombiansoccerleague;
-
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,30 +7,32 @@ import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.table.DefaultTableModel;
 
 public class Menu extends javax.swing.JFrame {
+
     private ArrayList<Team> lstTeams;
     private ArrayList<Match> totalMatches;
     private int userOption;
     //private ArrayList<MatchDate> lstMatchDates;
     public static ArrayList<Match> lstMatches;
-  //  Match match = new Match();
+    //  Match match = new Match();
     //MatchDate matchDate = new MatchDate();
     static int countMatchDate;
-            
-    String[] COLUMNS = {"Name", "W", "L","D","GS","GC","M","Pts"};
+
+    String[] COLUMNS = {"Name", "W", "L", "D", "GS", "GC", "M", "Pts"};
     String[] SCOLUMNS = {"Team1", "GoalsTeam1", "GoalsTeam2", "Team2"};
     DefaultTableModel tableModel;
-    
-    
+
     public Menu() {
-       lstTeams= new ArrayList<>();
-       //lstMatchDates=new ArrayList<>();
-       lstMatches=new ArrayList<>();
-       totalMatches=new ArrayList<>();
-       initComponents();
+        lstTeams = new ArrayList<>();
+        //lstMatchDates=new ArrayList<>();
+        lstMatches = new ArrayList<>();
+        totalMatches = new ArrayList<>();
+        initComponents();
+        initTeams();
+        getMatches();
 
 
     }
-    
+
     private void initObjects() {
         String[][] data = new String[lstTeams.size()][8];
         for (int i = 0; i < lstTeams.size(); i++) {
@@ -54,7 +54,7 @@ public class Menu extends javax.swing.JFrame {
         tblStats.setModel(tableModel);
         tblStats.setAutoCreateRowSorter(true);
     }
-    
+
     private void initSObjects() {
         var rows = totalMatches.size();
         String[][] data = new String[rows][4];
@@ -73,7 +73,7 @@ public class Menu extends javax.swing.JFrame {
         tblRecap.setModel(tableModel);
         tblRecap.setAutoCreateRowSorter(true);
     }
-    
+
     public int getUserOption() {
         return userOption;
     }
@@ -81,22 +81,22 @@ public class Menu extends javax.swing.JFrame {
     public void setUserOption(int userOption) {
         this.userOption = userOption;
     }
-    
+
     public ArrayList<Team> initTeams() {
         ArrayList<String> lstStringTeams = new ArrayList<>();
         lstStringTeams.add("Nacional");
         lstStringTeams.add("Patriotas");
         lstStringTeams.add("Santa Fe");
-        /*
+
         lstStringTeams.add("Cali");
-        
+        /*
         lstStringTeams.add("Tolima");
         lstStringTeams.add("Medellín");
         lstStringTeams.add("Patriotas");
         lstStringTeams.add("Aguilas Doradas");
         lstStringTeams.add("Millonarios");
         lstStringTeams.add("Once Caldas");*/
-        
+
         for (int i = 0; i < lstStringTeams.size(); i++) {
             Team team = new Team();
             team.setName(lstStringTeams.get(i));
@@ -105,9 +105,9 @@ public class Menu extends javax.swing.JFrame {
         return lstTeams;
     }
 
-    public void askUserScore(Team team1, Team team2, int goals1, int goals2){
+    public void askUserScore(Team team1, Team team2, int goals1, int goals2) {
         boolean flag;
-         do {
+        do {
             try {
                 var question = ("Insert the goals scored by " + team1.getName() + ":");
                 goals1 = Integer.parseInt(JOptionPane.showInputDialog(question));
@@ -116,25 +116,25 @@ public class Menu extends javax.swing.JFrame {
                 showMessageDialog(null, "Please, insert correct values");
                 flag = true;
             }
-        }while (flag);
-          
-        do{
+        } while (flag);
+
+        do {
             try {
                 var question = ("Insert the goals scored by " + team2.getName() + ":");
                 goals2 = Integer.parseInt(JOptionPane.showInputDialog(question));
                 flag = false;
-                } catch (Exception e) {
-                    System.out.println("Please, insert correct values");
-                    flag = true;
-                    showMessageDialog(null, "Please, insert correct values");
-                 }
-        }while (flag);
+            } catch (Exception e) {
+                System.out.println("Please, insert correct values");
+                flag = true;
+                showMessageDialog(null, "Please, insert correct values");
+            }
+        } while (flag);
     }
-   
+
     public void faceOff(Team team1, Team team2) {
-        Match match = new Match(team1,team2);
-        int goals1=0;
-        int goals2=0;
+        Match match = new Match(team1, team2);
+        int goals1 = 0;
+        int goals2 = 0;
         switch (userOption) {
             case 0:
                 askUserScore(team1, team2, goals1, goals2);
@@ -172,26 +172,34 @@ public class Menu extends javax.swing.JFrame {
                 break;
         }
     }
-    
-    
-    
-     public void getMatches(){
-        for (int i = 0; i < lstTeams.size(); i++) {
+
+    public void getMatches() {
+        for (int i = 0; i < lstTeams.size()-1; i++) {
             Team team1 = lstTeams.get(i);
-            Team team2 = lstTeams.get(lstTeams.size() - 1 - i);
+            Team team2 = lstTeams.get(lstTeams.size()-1-i);
             var matchS = new Match(team1, team2);
+
+            lstMatches.add(matchS);
+            Collections.rotate(lstTeams.subList(1, lstTeams.size()), 1);
+        }
+        totalMatches=lstMatches;
+    }
+
+    public void playMatches( int a) {
+        int i;
+
+        for (i = 0; i < a; i ++) {
+            Team team1 = lstMatches.get(0).getTeam1();
+            Team team2 = lstMatches.get(0).getTeam2();
             faceOff(team1, team2);
+            lstMatches.remove(0);
+            //lstMatches.remove(1);
             team1.setMatchesPlayed(1);
             team2.setMatchesPlayed(1);
-            lstMatches.add(matchS);
         }
-        Collections.rotate(lstTeams.subList(1, lstTeams.size()), 1);
     }
-    
 
- 
-    
-@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -370,15 +378,14 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPlayRoundActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlayRoundActionPerformed
-       initTeams();
+        
+        playMatches(1);
         do {
             countMatchDate++;
-            getMatches();
         } while (countMatchDate != 20);
-       initObjects();
-       initSObjects();
- 
-        
+        initObjects();
+        initSObjects();
+
         /*if (counter < (game.getTeamsLstSize()/2) * (game.getTeamsLstSize() - 2) + 1 ){
             counter += game.getTeamsLstSize()/2; 
             game.playRound();
@@ -396,7 +403,7 @@ public class Menu extends javax.swing.JFrame {
                 showMessageDialog(null, "Hold on!!!" +"\n"+ "All the rounds have already been played.");
                 disableButtons();
             }
-        } */ 
+        } */
     }//GEN-LAST:event_btnPlayRoundActionPerformed
 
     private void btnShowWinnerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowWinnerActionPerformed
@@ -409,8 +416,7 @@ public class Menu extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_btnShowWinnerActionPerformed
 
-    
-   /* public void showWinner(){
+    /* public void showWinner(){
        int maxPoints=0;
        ArrayList<String> winners = new ArrayList<>();
        for(Team e: lstTeams){
@@ -430,18 +436,15 @@ public class Menu extends javax.swing.JFrame {
         showMessageDialog(null, "The winners are "+winners);
        }
    }*/
-   
-    /*TODO Crear un alert que me muestre el ganador(podemos poner que cuando counter==)
+ /*TODO Crear un alert que me muestre el ganador(podemos poner que cuando counter==)
     if(counter==game.getLstSize()/2)*(game.getLstSize()-1) do el alert con el ganador*/
-    
-    /*public void disableButtons(){
+ /*public void disableButtons(){
         if (counter== (game.getTeamsLstSize()/2) *(game.getTeamsLstSize()-1) ) {  
             btnPlayRound.setEnabled(false);
             btnPlayTournament.setEnabled(false);
             btnPlayMatch.setEnabled(false);
         }
     }*/
-    
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
             new Menu().setVisible(true);
