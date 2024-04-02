@@ -19,14 +19,11 @@ public class Menu extends javax.swing.JFrame {
 
     public Menu() {
         lstTeams = new ArrayList<>();
-        //lstMatchDates=new ArrayList<>();
         lstMatches = new ArrayList<>();
         totalMatches = new ArrayList<>();
         initComponents();
         initTeams();
         getMatches();
-       // getMatches();
-       // getMatches();
 
     }
 
