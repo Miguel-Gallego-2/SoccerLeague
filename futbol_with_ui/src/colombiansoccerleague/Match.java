@@ -1,7 +1,6 @@
 
 package colombiansoccerleague;
 
-
 public class Match {
     private Team team1;
     private Team team2;
@@ -72,41 +71,6 @@ public class Match {
         team2.setPoints(1);
         team2.setDraws(1);
     }
-    /*
-     public void faceOff(Team team1, Team team2) {
-        int goals1=0;
-        int goals2=0;
-        switch (userOption) {
-            case 0:
-                askUserScore(team1, team2, goals1, goals2);
-                if (goals1 == goals2) {
-                    match.draw(team1, team2, goals1);
-                } else if (goals1 < goals2) {
-                    match.winner(team2, goals2, goals1);
-                    match.losser(team1, goals1, goals2);
-                } else {
-                    match.winner(team1, goals1, goals2);
-                    match.losser(team2, goals2, goals1);
-                }
-                break;
-            case 1:
-                goals1 = (int) (Math.random() * 5);
-                goals2 = (int) (Math.random() * 5);
-                if (goals1 == goals2) {
-                    match.draw(team1, team2, goals1);
-                } else if (goals1 < goals2) {
-                    match.winner(team2, goals2, goals1);
-                    match.losser(team1, goals1, goals2);
-                } else {
-                    match.winner(team1, goals1, goals2);
-                    match.losser(team2, goals2, goals1);
-                }
-                break;
-            default:
-                break;
-        }
-    }*/
-     
 }
 
 

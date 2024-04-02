@@ -166,7 +166,9 @@
                       <Component id="lblTitle" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="353" max="-2" attributes="0"/>
                       <Component id="btnPlayRound" min="-2" pref="100" max="-2" attributes="0"/>
-                      <EmptySpace pref="349" max="32767" attributes="0"/>
+                      <EmptySpace pref="141" max="32767" attributes="0"/>
+                      <Component id="btnPlayTournament" min="-2" pref="131" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -179,9 +181,10 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="btnPlayRound" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                                   <Component id="lblTitle" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnPlayTournament" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                               <Component id="jLabel1" min="-2" pref="70" max="-2" attributes="0"/>
                           </Group>
@@ -230,6 +233,27 @@
                   <Image iconType="3" name="/images/logoSmall.png"/>
                 </Property>
               </Properties>
+            </Component>
+            <Component class="javax.swing.JButton" name="btnPlayTournament">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="e7" green="e7" red="e7" type="rgb"/>
+                </Property>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Century Gothic" size="14" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Play Tournament"/>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                    <LineBorder roundedCorners="true" thickness="2">
+                      <Color PropertyName="color" blue="39" green="28" red="b7" type="rgb"/>
+                    </LineBorder>
+                  </Border>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPlayTournamentActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

@@ -88,11 +88,4 @@ public class Team {
     public void setMatchesPlayed(int matchesPlayed) {
         this.matchesPlayed += matchesPlayed;
     }
-    
-
-    public String toString(Team team) {
-        return "Team{" + "name=" + team.getName() + ", wins=" + team.getWins() + 
-                ", losses=" + team.getLosses() + ", draws=" + team.getDraws() + ", points=" + team.getPoints() + 
-                ", goalsScored=" + team.getGoalsScored() + ", goalsConceded=" + team.getGoalsConceded() + '}';
-    } 
 }

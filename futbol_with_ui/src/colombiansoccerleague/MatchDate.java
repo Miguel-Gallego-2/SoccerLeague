@@ -8,7 +8,6 @@ public class MatchDate {
    private int matchDateNumber;
    
     public MatchDate() {
-        
     }
     
     public MatchDate(ArrayList<Match> matches) {
@@ -30,6 +29,4 @@ public class MatchDate {
     public void setMatchDateNumber(int matchDateNumber) {
         this.matchDateNumber = matchDateNumber;
     }
-    
-    
 }
